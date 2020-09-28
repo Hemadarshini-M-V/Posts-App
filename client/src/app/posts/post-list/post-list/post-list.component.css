@@ -1,0 +1,12 @@
+mat-accordion{
+  width: 50%;
+
+}
+mat-card{
+  width: 80%;
+}
+
+.showPost{
+  padding-top: 3rem;
+  padding-left: 10rem;
+}
