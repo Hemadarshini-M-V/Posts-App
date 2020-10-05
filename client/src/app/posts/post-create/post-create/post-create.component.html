@@ -1,10 +1,10 @@
 <div class="createPost">
   <mat-card>
-    <form (submit) = "onNewPost(createPostForm)" #createPostForm="ngForm">
+    <form #savePostForm="ngForm">
       <mat-form-field>
         <input type="text"
         matInput
-        ngModel
+        [ngModel] = "editablePost?.title"
         name="postTitle"
         #title = "ngModel"
         placeholder="Title"
@@ -16,7 +16,7 @@
       <mat-form-field>
         <textarea matInput rows="6"
         name="postContent"
-        ngModel
+        [ngModel] = "editablePost?.content"
         #content = "ngModel"
         required
         placeholder="Content">
@@ -25,11 +25,8 @@
           Please enter some content
         </mat-error>
       </mat-form-field>
-      <button *ngIf="mode === 'create'" mat-raised-button color="accent">
-        Save Post
-      </button>
-      <button *ngIf="mode === 'edit'" mat-raised-button color="accent">
-        Edit Post
+      <button mat-raised-button color="accent" (click)="onSavePost(savePostForm)">
+        {{buttonContent}}
       </button>
     </form>
   </mat-card>

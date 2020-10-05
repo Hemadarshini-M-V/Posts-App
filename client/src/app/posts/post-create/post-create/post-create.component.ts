@@ -13,6 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 export class PostCreateComponent implements OnInit {
   mode: string;
   editPostId: string;
+  buttonContent: string;
+  editablePost: Post;
 
   //Injecting Post service and activated route
   constructor(private postService: PostService, private aRoute: ActivatedRoute ) { }
@@ -21,30 +23,51 @@ export class PostCreateComponent implements OnInit {
     this.aRoute.params.subscribe(params=>{
       if(params['postId']){
         this.mode = 'edit';
+        this.buttonContent = "Edit Post";
         this.editPostId = params['postId'];
+        this.fetchPost(this.editPostId);
       }
       else{
         this.mode = 'create';
+        this.buttonContent = "Save Post";
         this.editPostId = null;
       }
     })
   }
 
-  //Function to create a new post
-  onNewPost(createPostForm: NgForm){
-    if(createPostForm.invalid){
+  //Function to create a new post or edit existing post
+  onSavePost(savePostForm: NgForm){
+    if(savePostForm.invalid){
       return;
     }
-    var userPost: Post = {
-      "id": null,
-      "title": createPostForm.value.postTitle,
-      "content": createPostForm.value.postContent
+    if(this.mode === 'create'){
+      var userPost: Post = {
+        "id": null,
+        "title": savePostForm.value.postTitle,
+        "content": savePostForm.value.postContent
+      }
+      this.postService.addPost(userPost).subscribe(serverRes=>{
+        userPost.id = serverRes.id;  //Over-writing null id with id returned from backend
+        savePostForm.resetForm();
+      })
     }
-    this.postService.addPost(userPost).subscribe(serverRes=>{
-      userPost.id = serverRes.id;  //Over-writing null id with id returned from backend
-      createPostForm.resetForm();
-    })
+    else if(this.mode === 'edit'){
+      var userPost: Post = {
+        "id": this.editPostId,
+        "title": savePostForm.value.postTitle,
+        "content": savePostForm.value.postContent
+      }
+      this.postService.editPost(userPost).subscribe(serverRes=>{
+        savePostForm.resetForm();
+      })
+    }
 
   }
 
+  //Function to fetch a particular post
+  fetchPost(id: string){
+    this.postService.fetchPost(id).subscribe(post=>{
+      this.editablePost = post;
+    })
+  }
 }

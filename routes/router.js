@@ -29,20 +29,38 @@ router.post('/addPost',function(req,res,next){
 
 //Route handler to fetch all posts
 router.get('/fetchPosts', function(req, res, next) {
-  Post.find()
-    .then(documents=>{
+  Post.find().then(documents=>{
       res.json(documents);
-    })
+  })
 });
 
-//Route handler to delete a post based on id
-router.delete('/deletePost/:id',function(req,res, next){
-  postId = req.params.id;
-  Post.deleteOne({_id:postId})
-    .then((dat)=>{
-      res.json({"message":"Post with id "+postId+" deleted successfully"});
-    });
 
+//Route to fetch a particular post given id
+router.get('/fetchPost/:id', function(req, res, next){
+  var postId = req.params.id;
+  Post.findById(postId).then(post=>{
+    res.json(post);
+  })
+})
+
+//Route to edit a post given the post id
+router.put('/editPost/:id',function(req,res,next){
+  var editPost = new Post({
+    _id: req.body.id,
+    title: req.body.title,
+    content: req.body.content
+  });
+  Post.updateOne({_id: req.params.id},editPost).then(sucRes=>{
+    res.json({"message": "Post with id "+editPost+" updated successfully"});
+  })
+})
+
+//Route handler to delete a post based on id
+router.delete('/deletePost/:id',function(req,res,next){
+  postId = req.params.id;
+  Post.deleteOne({_id:postId}).then((dat)=>{
+      res.json({"message":"Post with id "+postId+" deleted successfully"});
+  });
 })
 
 module.exports = router;

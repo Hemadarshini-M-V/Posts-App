@@ -14,9 +14,20 @@ export class PostService {
     return this.httpClient.get<any[]>("http://localhost:3000/fetchPosts");
   }
 
+  //Function to fetch a particular post
+  fetchPost(id): Observable<any>{
+    return this.httpClient.get<any>("http://localhost:3000/fetchPost/"+id);
+  }
+
   //Function to add new post
   addPost(newPost):Observable<{"message":string,"id":string}>{
     return this.httpClient.post<{"message":string,"id":string}>("http://localhost:3000/addPost",newPost);
+  }
+
+  //Function to edit a post
+  editPost(postToBeEdited):Observable<{"message":string}>{
+    var postId =  postToBeEdited.id;
+    return this.httpClient.put<{"message":string}>("http://localhost:3000/editPost/"+postId,postToBeEdited);
   }
 
   //Function to delete post

@@ -23,7 +23,7 @@ export class PostListComponent implements OnInit {
     var transformedPosts = [];
     this.postService.fetchPosts().subscribe(
       //Transforming data to match Post model
-      postsData => {
+      postsData=> {
         transformedPosts = postsData.map(post=>{
           return {
             id: post._id,
@@ -32,6 +32,9 @@ export class PostListComponent implements OnInit {
           };
         });
         this.posts = transformedPosts;
+        this.pageLoaded = true;
+      },
+      err =>{
         this.pageLoaded = true;
       }
     )
