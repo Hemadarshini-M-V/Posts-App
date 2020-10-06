@@ -10,3 +10,7 @@ mat-card{
   padding-top: 3rem;
   padding-left: 10rem;
 }
+
+mat-spinner{
+  margin:auto;
+}

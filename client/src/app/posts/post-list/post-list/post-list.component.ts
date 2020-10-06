@@ -16,6 +16,7 @@ export class PostListComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchPosts();
+    this.pageLoaded = false;
   }
 
   //Function to fetch posts from backend
