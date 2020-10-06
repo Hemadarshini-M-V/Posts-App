@@ -1,9 +1,10 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Post } from '../../post.model';
 import { PostService } from '../../post-service/post.service';
-import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-post-create',
@@ -15,11 +16,14 @@ export class PostCreateComponent implements OnInit {
   editPostId: string;
   buttonContent: string;
   editablePost: Post;
+  pageLoaded: boolean = false;
 
   //Injecting Post service and activated route
-  constructor(private postService: PostService, private aRoute: ActivatedRoute ) { }
+  constructor(private postService: PostService, private aRoute: ActivatedRoute,
+                private router: Router) { }
 
   ngOnInit(): void {
+    this.pageLoaded = false;
     this.aRoute.params.subscribe(params=>{
       if(params['postId']){
         this.mode = 'edit';
@@ -31,6 +35,7 @@ export class PostCreateComponent implements OnInit {
         this.mode = 'create';
         this.buttonContent = "Save Post";
         this.editPostId = null;
+        this.pageLoaded = true;
       }
     })
   }
@@ -49,6 +54,7 @@ export class PostCreateComponent implements OnInit {
       this.postService.addPost(userPost).subscribe(serverRes=>{
         userPost.id = serverRes.id;  //Over-writing null id with id returned from backend
         savePostForm.resetForm();
+        this.router.navigate(['/']);
       })
     }
     else if(this.mode === 'edit'){
@@ -59,6 +65,7 @@ export class PostCreateComponent implements OnInit {
       }
       this.postService.editPost(userPost).subscribe(serverRes=>{
         savePostForm.resetForm();
+        this.router.navigate(['/']);
       })
     }
 
@@ -68,6 +75,7 @@ export class PostCreateComponent implements OnInit {
   fetchPost(id: string){
     this.postService.fetchPost(id).subscribe(post=>{
       this.editablePost = post;
+      this.pageLoaded = true;
     })
   }
 }

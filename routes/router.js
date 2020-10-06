@@ -45,13 +45,13 @@ router.get('/fetchPost/:id', function(req, res, next){
 
 //Route to edit a post given the post id
 router.put('/editPost/:id',function(req,res,next){
-  var editPost = new Post({
+  var editPost = new Post({  
     _id: req.body.id,
     title: req.body.title,
     content: req.body.content
   });
   Post.updateOne({_id: req.params.id},editPost).then(sucRes=>{
-    res.json({"message": "Post with id "+editPost+" updated successfully"});
+    res.json({"message": "Post with id "+editPost._id+" updated successfully"});
   })
 })
 

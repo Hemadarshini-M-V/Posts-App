@@ -21,6 +21,7 @@ export class PostListComponent implements OnInit {
   //Function to fetch posts from backend
   fetchPosts(){
     var transformedPosts = [];
+    this.pageLoaded = false;
     this.postService.fetchPosts().subscribe(
       //Transforming data to match Post model
       postsData=> {
