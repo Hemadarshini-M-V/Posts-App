@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Post } from '../../post.model';
@@ -17,12 +17,19 @@ export class PostCreateComponent implements OnInit {
   buttonContent: string;
   editablePost: Post;
   pageLoaded: boolean = false;
+  postForm: FormGroup;
 
   //Injecting Post service and activated route
   constructor(private postService: PostService, private aRoute: ActivatedRoute,
                 private router: Router) { }
 
   ngOnInit(): void {
+    this.postForm = new FormGroup({
+      'title': new FormControl(null,
+        {validators:[Validators.required, Validators.minLength(3)]}
+      ),
+      'content': new FormControl(null, {validators:[Validators.required]})
+    })
     this.pageLoaded = false;
     this.aRoute.params.subscribe(params=>{
       if(params['postId']){
@@ -41,30 +48,30 @@ export class PostCreateComponent implements OnInit {
   }
 
   //Function to create a new post or edit existing post
-  onSavePost(savePostForm: NgForm){
-    if(savePostForm.invalid){
+  onSavePost(){
+    if(this.postForm.invalid){
       return;
     }
     if(this.mode === 'create'){
       var userPost: Post = {
         "id": null,
-        "title": savePostForm.value.postTitle,
-        "content": savePostForm.value.postContent
+        "title": this.postForm.value.title,
+        "content": this.postForm.value.content
       }
       this.postService.addPost(userPost).subscribe(serverRes=>{
         userPost.id = serverRes.id;  //Over-writing null id with id returned from backend
-        savePostForm.resetForm();
+        this.postForm.reset();
         this.router.navigate(['/']);
       })
     }
     else if(this.mode === 'edit'){
       var userPost: Post = {
         "id": this.editPostId,
-        "title": savePostForm.value.postTitle,
-        "content": savePostForm.value.postContent
+        "title": this.postForm.value.title,
+        "content": this.postForm.value.content
       }
       this.postService.editPost(userPost).subscribe(serverRes=>{
-        savePostForm.resetForm();
+        this.postForm.reset();
         this.router.navigate(['/']);
       })
     }
@@ -75,6 +82,9 @@ export class PostCreateComponent implements OnInit {
   fetchPost(id: string){
     this.postService.fetchPost(id).subscribe(post=>{
       this.editablePost = post;
+      this.postForm.setValue(
+        {'title':this.editablePost.title,'content':this.editablePost.content}
+      );
       this.pageLoaded = true;
     })
   }
