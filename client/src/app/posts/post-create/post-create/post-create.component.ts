@@ -18,6 +18,7 @@ export class PostCreateComponent implements OnInit {
   editablePost: Post;
   pageLoaded: boolean = false;
   postForm: FormGroup;
+  imgPreview: string;
 
   //Injecting Post service and activated route
   constructor(private postService: PostService, private aRoute: ActivatedRoute,
@@ -28,7 +29,8 @@ export class PostCreateComponent implements OnInit {
       'title': new FormControl(null,
         {validators:[Validators.required, Validators.minLength(3)]}
       ),
-      'content': new FormControl(null, {validators:[Validators.required]})
+      'content': new FormControl(null, {validators:[Validators.required]}),
+      'image': new FormControl(null)
     })
     this.pageLoaded = false;
     this.aRoute.params.subscribe(params=>{
@@ -87,5 +89,16 @@ export class PostCreateComponent implements OnInit {
       );
       this.pageLoaded = true;
     })
+  }
+
+  onImagePicked(event: Event){
+    var imgFile = (event.target as HTMLInputElement).files[0];
+    this.postForm.patchValue({'image': imgFile});
+    this.postForm.get('image').updateValueAndValidity();
+    var reader = new FileReader();
+    reader.onload = ()=>{
+      this.imgPreview = reader.result as string;
+    }
+    reader.readAsDataURL(imgFile);
   }
 }
