@@ -14,6 +14,10 @@
           Please enter a title
         </mat-error>
       </mat-form-field>
+      <div>
+        <button type="button" mat-stroked-button (click)="imageUpload.click()">Upload Image</button>
+        <input type="file" #imageUpload/>
+      </div>
       <mat-form-field>
         <textarea matInput rows="6"
         name="postContent"
