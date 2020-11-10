@@ -19,18 +19,19 @@ export class PostListComponent implements OnInit {
     this.pageLoaded = false;
   }
 
-  //Function to fetch posts from backend
+  // Function to fetch posts from backend
   fetchPosts(){
     var transformedPosts = [];
     this.pageLoaded = false;
     this.postService.fetchPosts().subscribe(
-      //Transforming data to match Post model
-      postsData=> {
-        transformedPosts = postsData.map(post=>{
+      // Transforming data to match Post model
+      postsData => {
+        transformedPosts = postsData.map(post => {
           return {
             id: post._id,
             title: post.title,
-            content: post.content
+            content: post.content,
+            imagePath: post.imagePath
           };
         });
         this.posts = transformedPosts;

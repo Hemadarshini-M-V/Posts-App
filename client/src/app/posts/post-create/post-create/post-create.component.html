@@ -12,16 +12,24 @@
         </mat-error>
       </mat-form-field>
       <div>
-        <button type="button" mat-stroked-button (click)="imageUpload.click()">Upload Image</button>
-        <input type="file" #imageUpload  (change)="onImagePicked($event)"/>
+        <button type="button" mat-stroked-button (click)="imageUpload.click()">
+          {{mode == 'create'? 'Upload Image' : 'Change Image'}}
+        </button>
+        <input type="file"  #imageUpload  (change)="onImagePicked($event)"/>
       </div>
-      <div class="imagePreview" *ngIf="imgPreview!='' && imgPreview!=null &&
-          postForm.get('image').valid">
-        <img [src]="imgPreview" [alt]="postForm.value.title">
+      <div class="imagePreview" *ngIf="imgPreview!='' &&
+        imgPreview!=null && postForm.get('image').valid">
+          <img [src]="imgPreview" [alt]="postForm.value.title">
+      </div>
+      <div class="imagePreview" *ngIf="mode == 'edit' &&
+        postForm.value.image!= 'NO IMAGE' && (imgPreview == null || imgPreview == ''
+        || imgPreview == undefined)">
+          <img [src]="postForm.value.image" [alt]="postForm.value.title">
       </div>
       <mat-error *ngIf="postForm.get('image').invalid">
         Please select a valid image file
       </mat-error>
+      <br/>
       <mat-form-field>
         <textarea matInput rows="6"
         formControlName="content"

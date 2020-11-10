@@ -1,16 +1,25 @@
-mat-accordion{
+mat-accordion {
   width: 50%;
 
 }
-mat-card{
+
+mat-card {
   width: 80%;
 }
 
-.showPost{
+.showPost {
   padding-top: 3rem;
   padding-left: 10rem;
 }
 
-mat-spinner{
+mat-spinner {
   margin:auto;
+}
+
+.post-image {
+  width: 100%;
+}
+
+.post-image img {
+  width: 100%;
 }

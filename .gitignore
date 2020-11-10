@@ -1,2 +1,6 @@
 # dependencies
 /node_modules
+
+
+# For now, no uploading images onto cloud
+/images
