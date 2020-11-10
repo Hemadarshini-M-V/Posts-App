@@ -22,26 +22,26 @@ export class PostCreateComponent implements OnInit {
   imgPreview: string;
 
   // Injecting Post service and activated route
-  constructor (private postService: PostService, private aRoute: ActivatedRoute,
-                private router: Router) { }
+  constructor(private postService: PostService, private aRoute: ActivatedRoute,
+                private router: Router) {}
 
   ngOnInit(): void {
     this.postForm = new FormGroup({
       'title': new FormControl(null,
-        {validators:[Validators.required, Validators.minLength(3)]}
+        {validators: [Validators.required, Validators.minLength(3)]}
       ),
       'content': new FormControl(null, {validators: [Validators.required]}),
       'image': new FormControl(null, {asyncValidators: [mimeType]})
-    })
+    });
     this.pageLoaded = false;
-    this.aRoute.params.subscribe(params=>{
-      if(params['postId']){
+    this.aRoute.params.subscribe(params => {
+      if (params['postId']) {
         this.mode = 'edit';
         this.buttonContent = "Edit Post";
         this.editPostId = params['postId'];
         this.fetchPost(this.editPostId);
       }
-      else{
+      else {
         this.mode = 'create';
         this.buttonContent = "Save Post";
         this.editPostId = null;
@@ -50,12 +50,12 @@ export class PostCreateComponent implements OnInit {
     })
   }
 
-  //Function to create a new post or edit existing post
-  onSavePost(){
-    if(this.postForm.invalid){
+  // Function to create a new post or edit existing post
+  onSavePost() {
+    if (this.postForm.invalid) {
       return;
     }
-    if(this.mode === 'create'){
+    if (this.mode === 'create') {
       // Creating form data object to be sent to back-end
       var postFormData = new FormData();
       postFormData.append("title", this.postForm.value.title);
@@ -66,11 +66,11 @@ export class PostCreateComponent implements OnInit {
       }
       else
         postFormData.append("image", "");
-      this.postService.addPost(postFormData).subscribe(serverRes=>{
+      this.postService.addPost(postFormData).subscribe(serverRes => {
         // userPost.id = serverRes.id;  //Over-writing null id with id returned from backend
         this.postForm.reset();
         this.router.navigate(['/']);
-      })
+      });
     }
     else if (this.mode === 'edit') {
       var userPost: Post | FormData;
@@ -95,33 +95,32 @@ export class PostCreateComponent implements OnInit {
         else
           userPost.append("image", "");
       }
-      this.postService.editPost(userPost).subscribe(serverRes=>{
+      this.postService.editPost(userPost).subscribe(serverRes => {
         this.postForm.reset();
         this.router.navigate(['/']);
       })
     }
-
   }
 
   // Function to fetch a particular post
-  fetchPost(id: string){
-    this.postService.fetchPost(id).subscribe(post=>{
+  fetchPost(id: string) {
+    this.postService.fetchPost(id).subscribe(post => {
       this.editablePost = post;
       this.postForm.setValue(
         {'title': this.editablePost.title,'content': this.editablePost.content,
           'image': this.editablePost.imagePath}
       );
       this.pageLoaded = true;
-    })
+    });
   }
 
   // Function to append image file name to form data and image preview
-  onImagePicked(event: Event){
+  onImagePicked(event: Event) {
     var imgFile = (event.target as HTMLInputElement).files[0];
     this.postForm.patchValue({'image': imgFile});
     this.postForm.get('image').updateValueAndValidity();
     var reader = new FileReader();
-    reader.onload = ()=>{
+    reader.onload = () => {
       this.imgPreview = reader.result as string;
     }
     reader.readAsDataURL(imgFile);

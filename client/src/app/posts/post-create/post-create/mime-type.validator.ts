@@ -2,10 +2,10 @@ import { AbstractControl } from '@angular/forms';
 import { Observable, Observer, of } from 'rxjs';
 
 export function mimeType(control: AbstractControl):
-  Observable<{[key:string]:any}> | Promise<{[key:string]:any}> {
+  Observable <{[key: string]: any}> | Promise <{[key: string]: any}> {
     const file = control.value as File;
     const fileReader = new FileReader();
-    const fRObs = new Observable((obs: Observer<{[key: string]:any}>)=>{
+    const fRObs = new Observable((obs: Observer <{[key: string]: any}>) => {
       fileReader.addEventListener("loadend", () => {
         const arr = new Uint8Array(fileReader.result as ArrayBuffer).subarray(0, 4);
         let header = "";

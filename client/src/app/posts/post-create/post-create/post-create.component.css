@@ -1,43 +1,43 @@
-mat-card{
+mat-card {
   width: 80%
 }
 
-mat-form-field{
+mat-form-field {
   width: 100%
 }
 
-textarea{
+textarea {
   width: 100%
 }
 
-:host{
+:host {
   margin-top: 20px;
   display: block;
   margin-left: 20px;
 }
 
-button{
+button {
   margin-top: 20 px;
 }
 
-.createPost{
+.createPost {
   padding-top: 3rem;
   padding-left: 10rem;
 }
 
-mat-spinner{
+mat-spinner {
   margin:auto;
 }
 
-input[type="file"]{
+input[type="file"] {
   visibility: hidden;
 }
 
-.imagePreview{
+.imagePreview {
   height: 5rem;
   margin: 1rem 0;
 }
 
-.imagePreview img{
+.imagePreview img {
   height: 100%;
 }

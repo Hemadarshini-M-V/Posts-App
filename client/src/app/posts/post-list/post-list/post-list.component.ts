@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { PostService } from '../../post-service/post.service';
 import { Post } from '../../post.model';
@@ -12,7 +12,7 @@ export class PostListComponent implements OnInit {
   posts: Post[] = [];
   pageLoaded: boolean = false;
 
-  constructor(private postService: PostService) { }
+  constructor(private postService: PostService) {}
 
   ngOnInit(): void {
     this.fetchPosts();
@@ -20,7 +20,7 @@ export class PostListComponent implements OnInit {
   }
 
   // Function to fetch posts from backend
-  fetchPosts(){
+  fetchPosts() {
     var transformedPosts = [];
     this.pageLoaded = false;
     this.postService.fetchPosts().subscribe(
@@ -37,18 +37,18 @@ export class PostListComponent implements OnInit {
         this.posts = transformedPosts;
         this.pageLoaded = true;
       },
-      err =>{
+      err => {
         this.pageLoaded = true;
       }
     )
   }
 
-  //Function to delete a post
-  deletePost(postId: string){
+  // Function to delete a post
+  deletePost(postId: string) {
     this.postService.deletePost(postId)
-      .subscribe(data=>{
-        for(let j=0; j<this.posts.length; j++){
-          if(this.posts[j].id === postId){
+      .subscribe(data => {
+        for(let j=0; j<this.posts.length; j++) {
+          if (this.posts[j].id === postId) {
             this.posts.splice(j,1);
           }
         }

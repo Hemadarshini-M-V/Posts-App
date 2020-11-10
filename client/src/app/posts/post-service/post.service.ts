@@ -7,31 +7,31 @@ import { Observable } from 'rxjs';
 })
 export class PostService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
-  //Function to fetch all posts from backend
-  fetchPosts(): Observable<any[]>{
-    return this.httpClient.get<any[]>("http://localhost:3000/fetchPosts");
+  // Function to fetch all posts from backend
+  fetchPosts(): Observable <any[]> {
+    return this.httpClient.get<any[]> ("http://localhost:3000/fetchPosts");
   }
 
-  //Function to fetch a particular post
-  fetchPost(id): Observable<any>{
-    return this.httpClient.get<any>("http://localhost:3000/fetchPost/"+id);
+  // Function to fetch a particular post
+  fetchPost(id): Observable <any> {
+    return this.httpClient.get<any> ("http://localhost:3000/fetchPost/"+ id);
   }
 
-  //Function to add new post
-  addPost(newPost): Observable < {"message": string, "id": string, "imagePath": string} > {
-    return this.httpClient.post< {"message": string, "id": string, "imagePath": string} >("http://localhost:3000/addPost", newPost);
+  // Function to add new post
+  addPost(newPost): Observable <{"message": string, "id": string, "imagePath": string}> {
+    return this.httpClient.post <{"message": string, "id": string, "imagePath": string}> ("http://localhost:3000/addPost", newPost);
   }
 
-  //Function to edit a post
-  editPost(postToBeEdited):Observable<{"message":string}>{
+  // Function to edit a post
+  editPost(postToBeEdited): Observable <{"message":string}> {
     var postId =  postToBeEdited.id;
-    return this.httpClient.put<{"message":string}>("http://localhost:3000/editPost/"+ postId, postToBeEdited);
+    return this.httpClient.put <{"message": string}> ("http://localhost:3000/editPost/"+ postId, postToBeEdited);
   }
 
-  //Function to delete post
-  deletePost(postId: string):Observable<{"message":string}>{
-    return this.httpClient.delete<{"message":string}>("http://localhost:3000/deletePost/"+ postId);
+  // Function to delete post
+  deletePost(postId: string): Observable <{"message":string}> {
+    return this.httpClient.delete <{"message":string}> ("http://localhost:3000/deletePost/"+ postId);
   }
 }
