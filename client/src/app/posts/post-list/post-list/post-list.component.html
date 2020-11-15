@@ -1,25 +1,25 @@
 <div class="showPost">
   <mat-spinner *ngIf="!pageLoaded"></mat-spinner>
-  <mat-card>
-    <mat-accordion multi="true">
-      <div *ngIf="posts.length > 0 && pageLoaded">
-        <mat-expansion-panel *ngFor="let post of posts">
-          <mat-expansion-panel-header>
-            {{post.title}}
-          </mat-expansion-panel-header>
-          <div class="post-image" *ngIf="post.imagePath!='NO IMAGE'">
-            <img [src]="post.imagePath" [alt]="post.title"/>
-          </div>
-          <p>{{post.content}}</p>
-          <mat-action-row>
-            <a [routerLink]="['/edit',post.id]" mat-button color="primary">Edit</a>
-            <button mat-button color="warn" (click)="deletePost(post.id)">Delete</button>
-          </mat-action-row>
-        </mat-expansion-panel>
+  <mat-accordion multi="true" *ngIf="posts.length > 0 && pageLoaded">
+    <mat-expansion-panel *ngFor="let post of posts">
+      <mat-expansion-panel-header>
+        {{post.title}}
+      </mat-expansion-panel-header>
+      <div class="post-image" *ngIf="post.imagePath!='NO IMAGE'">
+        <img [src]="post.imagePath" [alt]="post.title"/>
       </div>
-      <div *ngIf="posts.length == 0 && pageLoaded">
-        No posts yet!
-      </div>
-    </mat-accordion>
-  </mat-card>
+      <p>{{post.content}}</p>
+      <mat-action-row>
+        <a [routerLink]="['/edit',post.id]" mat-button color="primary">Edit</a>
+        <button mat-button color="warn" (click)="deletePost(post.id)">Delete</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <mat-paginator [length]="postsLength" [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions" (page)="onPageChanged($event)"
+    *ngIf="posts.length > 0">
+  </mat-paginator>
+  <div class="info-text mat-body-1" *ngIf="posts.length == 0 && pageLoaded">
+    No posts yet!
+  </div>
 </div>

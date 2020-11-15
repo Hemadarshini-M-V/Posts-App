@@ -15,7 +15,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-// Allowing access to public/images folder
+// Allowing access to /images folder
 app.use('/resources', express.static(path.join("images")));
 
 // Using the router for all urls 

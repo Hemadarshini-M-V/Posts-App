@@ -63,9 +63,31 @@ router.post('/addPost', multer({storage: imgStorage}).single("image"),
 
 // Route handler to fetch all posts
 router.get('/fetchPosts', function(req, res, next) {
-  Post.find().then(documents => {
-      res.json(documents);
+
+  // Retrieving pagination data
+  const pageSize = Number(req.query.pageSize);
+  const currentPage = Number(req.query.currentPage);
+  const postQuery = Post.find();
+
+  // Retrieving posts as per page size 
+  if (pageSize && currentPage) {
+    postQuery
+      .skip(pageSize * (currentPage - 1))
+      .limit(pageSize);
+  }
+
+  let fetchedPosts;
+  postQuery.then(documents => {
+      fetchedPosts = documents;
+      return Post.countDocuments();
   })
+  .then(count => {
+    return res.json({
+      message: "Posts fetched successfully!",
+      allPostsCount: count,
+      documents: fetchedPosts
+    })
+  });
 });
 
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 
 import { PostService } from '../../post-service/post.service';
 import { Post } from '../../post.model';
@@ -11,22 +12,26 @@ import { Post } from '../../post.model';
 export class PostListComponent implements OnInit {
   posts: Post[] = [];
   pageLoaded: boolean = false;
+  postsLength = 0;
+  pageSize = 5;
+  currentPage = 1;
+  pageSizeOptions = [1, 2, 5, 10];
 
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
-    this.fetchPosts();
+    this.fetchPosts(this.pageSize, 1);
     this.pageLoaded = false;
   }
 
   // Function to fetch posts from backend
-  fetchPosts() {
+  fetchPosts(pageSize, currentPage) {
     var transformedPosts = [];
     this.pageLoaded = false;
-    this.postService.fetchPosts().subscribe(
+    this.postService.fetchPosts(pageSize, currentPage).subscribe(
       // Transforming data to match Post model
       postsData => {
-        transformedPosts = postsData.map(post => {
+        transformedPosts = postsData.documents.map(post => {
           return {
             id: post._id,
             title: post.title,
@@ -35,6 +40,7 @@ export class PostListComponent implements OnInit {
           };
         });
         this.posts = transformedPosts;
+        this.postsLength = postsData.allPostsCount;
         this.pageLoaded = true;
       },
       err => {
@@ -45,14 +51,17 @@ export class PostListComponent implements OnInit {
 
   // Function to delete a post
   deletePost(postId: string) {
+    this.pageLoaded = false;
     this.postService.deletePost(postId)
-      .subscribe(data => {
-        for(let j=0; j<this.posts.length; j++) {
-          if (this.posts[j].id === postId) {
-            this.posts.splice(j,1);
-          }
-        }
-        // this.postDeleted.emit(postId); //Emitting post delete event to update posts locally
-      })
+      .subscribe( data => {
+        this.fetchPosts(this.pageSize, this.currentPage);
+      });
+  }
+
+  onPageChanged(pageData : PageEvent) {
+    this.pageLoaded = false;
+    this.pageSize = pageData.pageSize;
+    this.currentPage = pageData.pageIndex + 1;
+    this.fetchPosts(this.pageSize, this.currentPage);
   }
 }
