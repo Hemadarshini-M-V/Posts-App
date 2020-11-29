@@ -86,9 +86,9 @@ router.get('/fetchPosts', function(req, res, next) {
       message: "Posts fetched successfully!",
       allPostsCount: count,
       documents: fetchedPosts
-    })
+    });
   });
-});
+})
 
 
 // Route to fetch a particular post given id

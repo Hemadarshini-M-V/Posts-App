@@ -20,8 +20,8 @@ export class PostListComponent implements OnInit {
   constructor(private postService: PostService) {}
 
   ngOnInit(): void {
-    this.fetchPosts(this.pageSize, 1);
     this.pageLoaded = false;
+    this.fetchPosts(this.pageSize, 1);
   }
 
   // Function to fetch posts from backend
@@ -58,6 +58,7 @@ export class PostListComponent implements OnInit {
       });
   }
 
+  // Function called when paginator is handled by user
   onPageChanged(pageData : PageEvent) {
     this.pageLoaded = false;
     this.pageSize = pageData.pageSize;

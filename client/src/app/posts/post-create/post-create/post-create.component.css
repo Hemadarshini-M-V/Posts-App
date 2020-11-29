@@ -14,19 +14,16 @@ textarea {
   margin-top: 20px;
   display: block;
   margin-left: 20px;
+  padding-top: 3rem;
+  padding-left: 10rem;
 }
 
 button {
   margin-top: 20 px;
 }
 
-.createPost {
-  padding-top: 3rem;
-  padding-left: 10rem;
-}
-
 mat-spinner {
-  margin:auto;
+  margin: auto;
 }
 
 input[type="file"] {
